@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Text, StyleSheet } from 'react-native';
-import { Formik } from 'formik';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useState } from "react";
+import { Text, StyleSheet } from "react-native";
+import { Formik } from "formik";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import {
   View,
@@ -10,32 +10,28 @@ import {
   Logo,
   Button,
   FormErrorMessage,
-} from '../../components';
-import { Images, Colors, auth } from '../../config';
-import { useTogglePasswordVisibility } from '../../hooks';
-import { loginValidationSchema } from '../../utils';
-import { useUserContext } from '../../providers/UserContext';
+} from "../../components";
+import { Images, Colors, auth } from "../../config";
+import { useTogglePasswordVisibility } from "../../hooks";
+import { loginValidationSchema } from "../../utils";
+import { useUserContext } from "../../providers/UserContext";
 
 export const LoginScreen = ({ navigation }) => {
   const { signInWithGoogle } = useUserContext();
-  const [errorState, setErrorState] = useState('');
-  const {
-    passwordVisibility,
-    handlePasswordVisibility,
-    rightIcon,
-  } = useTogglePasswordVisibility();
+  const [errorState, setErrorState] = useState("");
+  const { passwordVisibility, handlePasswordVisibility, rightIcon } =
+    useTogglePasswordVisibility();
 
-  
-  const handleLogin = values => {
-    const { email, password } =  values;
-    signInWithEmailAndPassword(auth, email, password).catch(error =>
+  const handleLogin = (values) => {
+    const { email, password } = values;
+    signInWithEmailAndPassword(auth, email, password).catch((error) =>
       setErrorState(error.message)
     );
   };
 
   const handleSignInWithGoogle = () => {
     try {
-      signInWithGoogle()
+      signInWithGoogle();
     } catch (error) {
       setErrorState(error.message);
     }
@@ -53,11 +49,12 @@ export const LoginScreen = ({ navigation }) => {
           </View>
           <Formik
             initialValues={{
-              email: '',
-              password: '',
+              email: "",
+              password: "",
             }}
             validationSchema={loginValidationSchema}
-            onSubmit={values => handleLogin(values)}>
+            onSubmit={(values) => handleLogin(values)}
+          >
             {({
               values,
               touched,
@@ -69,41 +66,41 @@ export const LoginScreen = ({ navigation }) => {
               <>
                 {/* Input fields */}
                 <TextInput
-                  name='email'
-                  leftIconName='email'
-                  placeholder='Enter email'
-                  autoCapitalize='none'
-                  keyboardType='email-address'
-                  textContentType='emailAddress'
+                  name="email"
+                  leftIconName="email"
+                  placeholder="Enter email"
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                  textContentType="emailAddress"
                   autoFocus={true}
                   value={values.email}
-                  onChangeText={handleChange('email')}
-                  onBlur={handleBlur('email')}
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
                 />
                 <FormErrorMessage
                   error={errors.email}
                   visible={touched.email}
                 />
                 <TextInput
-                  name='password'
-                  leftIconName='key-variant'
-                  placeholder='Enter password'
-                  autoCapitalize='none'
+                  name="password"
+                  leftIconName="key-variant"
+                  placeholder="Enter password"
+                  autoCapitalize="none"
                   autoCorrect={false}
                   secureTextEntry={passwordVisibility}
-                  textContentType='password'
+                  textContentType="password"
                   rightIcon={rightIcon}
                   handlePasswordVisibility={handlePasswordVisibility}
                   vralue={values.password}
-                  onChangeText={handleChange('password')}
-                  onBlur={handleBlur('password')}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
                 />
                 <FormErrorMessage
                   error={errors.password}
                   visible={touched.password}
                 />
                 {/* Display Screen Error Mesages */}
-                {errorState !== '' ? (
+                {errorState !== "" ? (
                   <FormErrorMessage error={errorState} visible={true} />
                 ) : null}
                 {/* Login button */}
@@ -116,13 +113,16 @@ export const LoginScreen = ({ navigation }) => {
           <Button
             style={styles.borderlessButtonContainer}
             borderless
-            title={'Forgot Password?'}
-            onPress={() => navigation.navigate('ForgotPassword')}
+            title={"Forgot Password?"}
+            onPress={() => navigation.navigate("ForgotPassword")}
           />
           <View style={styles.center}>
             <Text style={styles.text}>OR</Text>
           </View>
-          <Button style={styles.button} onPress={() => handleSignInWithGoogle()}>
+          <Button
+            style={styles.button}
+            onPress={() => handleSignInWithGoogle()}
+          >
             <Text style={styles.buttonText}>Sign In With Google</Text>
           </Button>
         </View>
@@ -130,7 +130,8 @@ export const LoginScreen = ({ navigation }) => {
       {/* App info footer */}
       <Button
         style={styles.footer}
-        onPress={() => navigation.navigate('Signup')}>
+        onPress={() => navigation.navigate("Signup")}
+      >
         <Text style={styles.footerText}>Create a new account?</Text>
       </Button>
     </>
@@ -144,26 +145,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   center: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   screenTitle: {
     fontSize: 32,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.black,
     paddingTop: 35,
     paddingBottom: 20,
   },
   text: {
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.black,
     paddingTop: 20,
     paddingBottom: 20,
   },
   button: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 8,
     backgroundColor: Colors.black,
     padding: 10,
@@ -172,23 +173,23 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: Colors.white,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   borderlessButtonContainer: {
     marginTop: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   footer: {
-    position: 'relative',
+    position: "relative",
     bottom: 0,
     backgroundColor: Colors.black,
     padding: 15,
-    alignItems: 'center',
+    alignItems: "center",
   },
   footerText: {
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.white,
   },
 });

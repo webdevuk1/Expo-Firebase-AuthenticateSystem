@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { updateEmail } from "../../config/user";
 
 import { View, TextInput, Button, FormErrorMessage } from "../../components";
-import { Images, Colors } from "../../config";
+import { Colors } from "../../config";
 import { updateEmailValidationSchema } from "../../utils";
 import { useUserContext } from "../../providers/UserContext";
 
@@ -18,30 +18,36 @@ export const UpdateEmailScreen = ({ navigation }) => {
     const { email } = values;
 
     try {
-      if (values !== user.email) {
-        await updateEmail(values).then(() => {
+      await updateEmail(values).then((results) => {
+        if (results) {
           setSuccessState(
             "Congratulations your email address has been updated. An email will be sent to the original email address so if you have made any mistakes you can change it back to the original address."
           );
           setErrorState("");
-        });
-      }
+        }
+      });
     } catch (error) {
+      setSuccessState("");
       setErrorState(error.message);
     }
-    // pressing update email without any letters in the text box is showing succesState... need fix
+
     // need put reloadUser() onto the back button
     // condiction render the email not to show once its been updated.
     // need put reloadUser() onto the back button
-    reloadUser();
+    // find out why google auth verify account
+    // need look into verifyBeforeUpdateEmail
+
+    // reauthentate with google
+
+    //reloadUser();
 
     return handleUpdateEmail;
   };
-
+  //need to change seconds on a module
   useEffect(() => {
     const timer = setTimeout(() => {
       navigation.navigate("ProfileScreen");
-    }, 200000);
+    }, 170000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -77,13 +83,14 @@ export const UpdateEmailScreen = ({ navigation }) => {
               <TextInput
                 name="email"
                 leftIconName="email"
-                placeholder="Enter email"
+                placeholder="Enter New Email Address"
                 autoCapitalize="none"
                 keyboardType="email-address"
                 textContentType="emailAddress"
                 autoFocus={true}
                 value={values.email}
                 onChangeText={handleChange("email")}
+                onChange={(event) => setErrorState("")}
                 onBlur={handleBlur("email")}
               />
               <FormErrorMessage error={errors.email} visible={touched.email} />
@@ -93,7 +100,7 @@ export const UpdateEmailScreen = ({ navigation }) => {
               ) : null}
               {/* Login button */}
               <Button style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Update Email Address</Text>
+                <Text style={styles.buttonText}>Update</Text>
               </Button>
             </>
           )}

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet } from 'react-native';
-import { Formik } from 'formik';
-import { updatePassword } from '../../config/user';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useEffect, useState } from "react";
+import { Text, StyleSheet } from "react-native";
+import { Formik } from "formik";
+import { updatePassword } from "../../config/user";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import {
   View,
@@ -10,14 +10,14 @@ import {
   Logo,
   Button,
   FormErrorMessage,
-} from '../../components';
-import { Images, Colors } from '../../config';
-import { useTogglePasswordVisibility } from '../../hooks';
-import { signupValidationSchema } from '../../utils';
+} from "../../components";
+import { Images, Colors } from "../../config";
+import { useTogglePasswordVisibility } from "../../hooks";
+import { signupValidationSchema } from "../../utils";
 
 export const UpdatePasswordScreen = ({ navigation }) => {
-  const [errorState, setErrorState] = useState('');
-  const [successState, setSuccessState] = useState('');
+  const [errorState, setErrorState] = useState("");
+  const [successState, setSuccessState] = useState("");
 
   const {
     passwordVisibility,
@@ -28,11 +28,11 @@ export const UpdatePasswordScreen = ({ navigation }) => {
     confirmPasswordVisibility,
   } = useTogglePasswordVisibility();
 
-  const handleUpdatePassword = async values => {
+  const handleUpdatePassword = async (values) => {
     const { password } = values;
     try {
       await updatePassword(values);
-      setSuccessState('Congratulations your password has been updated.');
+      setSuccessState("Congratulations your password has been updated.");
     } catch (error) {
       setErrorState(error.message);
     }
@@ -41,8 +41,8 @@ export const UpdatePasswordScreen = ({ navigation }) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.navigate('ProfileScreen');
-    }, 200000);
+      navigation.navigate("ProfileScreen");
+    }, 170000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -55,7 +55,6 @@ export const UpdatePasswordScreen = ({ navigation }) => {
           <View style={styles.logo}>
             <Logo uri={Images.logo} />
           </View>
-          <Text style={styles.screenTitle}>Create a new Password!</Text>
           {successState ? (
             <Text style={styles.screenText}>{successState}</Text>
           ) : null}
@@ -63,11 +62,12 @@ export const UpdatePasswordScreen = ({ navigation }) => {
         {/* Formik Wrapper */}
         <Formik
           initialValues={{
-            password: '',
-            confirmPassword: '',
+            password: "",
+            confirmPassword: "",
           }}
           validationSchema={signupValidationSchema}
-          onSubmit={values => handleUpdatePassword(values)}>
+          onSubmit={(values) => handleUpdatePassword(values)}
+        >
           {({
             values,
             touched,
@@ -78,48 +78,48 @@ export const UpdatePasswordScreen = ({ navigation }) => {
           }) => (
             <>
               <TextInput
-                name='password'
-                leftIconName='key-variant'
-                placeholder='Enter password'
-                autoCapitalize='none'
+                name="password"
+                leftIconName="key-variant"
+                placeholder="Enter New Password"
+                autoCapitalize="none"
                 autoCorrect={false}
                 secureTextEntry={passwordVisibility}
-                textContentType='newPassword'
+                textContentType="newPassword"
                 rightIcon={rightIcon}
                 handlePasswordVisibility={handlePasswordVisibility}
                 value={values.password}
-                onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
               />
               <FormErrorMessage
                 error={errors.password}
                 visible={touched.password}
               />
               <TextInput
-                name='confirmPassword'
-                leftIconName='key-variant'
-                placeholder='Enter password'
-                autoCapitalize='none'
+                name="confirmPassword"
+                leftIconName="key-variant"
+                placeholder="Enter password"
+                autoCapitalize="none"
                 autoCorrect={false}
                 secureTextEntry={confirmPasswordVisibility}
-                textContentType='password'
+                textContentType="password"
                 rightIcon={confirmPasswordIcon}
                 handlePasswordVisibility={handleConfirmPasswordVisibility}
                 value={values.confirmPassword}
-                onChangeText={handleChange('confirmPassword')}
-                onBlur={handleBlur('confirmPassword')}
+                onChangeText={handleChange("confirmPassword")}
+                onBlur={handleBlur("confirmPassword")}
               />
               <FormErrorMessage
                 error={errors.confirmPassword}
                 visible={touched.confirmPassword}
               />
               {/* Display Screen Error Mesages */}
-              {errorState !== '' ? (
+              {errorState !== "" ? (
                 <FormErrorMessage error={errorState} visible={true} />
               ) : null}
               {/* Signup button */}
               <Button style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Update password</Text>
+                <Text style={styles.buttonText}>Update</Text>
               </Button>
             </>
           )}
@@ -135,27 +135,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   center: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   logo: {
     paddingTop: 10,
   },
-  screenTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: Colors.black,
-  },
   screenText: {
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.black,
     paddingTop: 10,
     paddingBottom: 10,
   },
   button: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 8,
     backgroundColor: Colors.black,
     padding: 10,
@@ -164,6 +159,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: Colors.white,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });

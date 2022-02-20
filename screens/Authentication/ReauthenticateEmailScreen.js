@@ -11,7 +11,7 @@ import { loginValidationSchema } from "../../utils";
 import { useUserContext } from "../../providers/UserContext";
 
 export const ReauthenticateEmailScreen = ({ navigation }) => {
-  const { signInWithGoogle } = useUserContext();
+  const { reauthenticateWithGoogle, useNav } = useUserContext();
   const [errorState, setErrorState] = useState("");
   const { passwordVisibility, handlePasswordVisibility, rightIcon } =
     useTogglePasswordVisibility();
@@ -27,11 +27,16 @@ export const ReauthenticateEmailScreen = ({ navigation }) => {
     return handleReauthenticate;
   };
 
-  const handleSignInWithGoogle = () => {
+  const handleSignInWithGoogle = async () => {
     try {
-      signInWithGoogle().then(() => {
-        navigation.navigate("UpdateEmailScreen");
+      await reauthenticateWithGoogle().then(() => {
+        // if (useNav === true) {
+        //navigation.navigate("UpdateEmailScreen");
+        console.log("kk");
+        // }
       });
+      //navigation.navigate("UpdateEmailScreen");
+      // navigation.navigate("UpdateEmailScreen");
     } catch (error) {
       setErrorState(error.message);
     }
@@ -46,6 +51,9 @@ export const ReauthenticateEmailScreen = ({ navigation }) => {
           <View style={styles.center}>
             <Text style={styles.screenTitle}>
               Sign In To Update Email Address
+            </Text>
+            <Text style={styles.screenTitle}>
+              This for securety reasons need sort this out .
             </Text>
           </View>
           <Formik

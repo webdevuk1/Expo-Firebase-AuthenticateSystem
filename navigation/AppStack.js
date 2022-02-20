@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { Icon } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
-import { HeaderBackButton } from '@react-navigation/elements';
-import { StackActions } from '@react-navigation/native';
+import * as React from "react";
+import { StyleSheet } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Icon } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
+import { HeaderBackButton } from "@react-navigation/elements";
+import { StackActions } from "@react-navigation/native";
 
 import {
   HomeScreen,
@@ -14,8 +14,8 @@ import {
   ReauthenticatePasswordScreen,
   ReauthenticateEmailScreen,
   UpdateEmailScreen,
-} from '../screens';
-import { View, Button } from '../components';
+} from "../screens";
+import { View, Button } from "../components";
 
 const Stack = createStackNavigator();
 
@@ -25,32 +25,32 @@ export const AppStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name='HomeScreen'
+        name="HomeScreen"
         component={HomeScreen}
         options={{
-          title: 'FitAddicted',
-          headerRight: props => (
+          // title: 'FitAddicted',
+          headerRight: (props) => (
             <View style={styles.container}>
               <Button style={{ marginRight: 13 }}>
                 <Icon
-                  type='ionicon'
+                  type="ionicon"
                   name={
-                    Platform.OS === 'ios'
-                      ? 'ios-calendar-sharp'
-                      : 'calendar-sharp'
+                    Platform.OS === "ios"
+                      ? "ios-calendar-sharp"
+                      : "calendar-sharp"
                   }
                   size={33}
-                  onPress={() => navigation.navigate('CalandarScreen')}
+                  onPress={() => navigation.navigate("CalandarScreen")}
                 />
               </Button>
               <Button>
                 <Icon
-                  type='ionicon'
+                  type="ionicon"
                   name={
-                    Platform.OS === 'ios' ? 'ios-person-sharp' : 'person-sharp'
+                    Platform.OS === "ios" ? "ios-person-sharp" : "person-sharp"
                   }
                   size={33}
-                  onPress={() => navigation.navigate('ProfileScreen')}
+                  onPress={() => navigation.navigate("ProfileScreen")}
                 />
               </Button>
             </View>
@@ -59,25 +59,25 @@ export const AppStack = () => {
       />
 
       <Stack.Screen
-        name='ProfileScreen'
+        name="ProfileScreen"
         component={ProfileScreen}
         options={{
-          title: 'Settings',
+          title: "Settings",
         }}
       />
       <Stack.Screen
-        name='CalandarScreen'
+        name="CalandarScreen"
         component={CalandarScreen}
         options={{
-          title: 'Calandar',
+          title: "Calandar",
         }}
       />
       <Stack.Screen
-        name='UpdateEmailScreen'
+        name="UpdateEmailScreen"
         component={UpdateEmailScreen}
         options={{
-          title: 'Update Email Address',
-          headerLeft: props => (
+          title: "Update Email Address",
+          headerLeft: (props) => (
             <HeaderBackButton
               {...props}
               onPress={() => {
@@ -88,11 +88,11 @@ export const AppStack = () => {
         }}
       />
       <Stack.Screen
-        name='UpdatePasswordScreen'
+        name="UpdatePasswordScreen"
         component={UpdatePasswordScreen}
         options={{
-          title: 'Update Password',
-          headerLeft: props => (
+          title: "Update Password",
+          headerLeft: (props) => (
             <HeaderBackButton
               {...props}
               onPress={() => {
@@ -103,17 +103,17 @@ export const AppStack = () => {
         }}
       />
       <Stack.Screen
-        name='ReauthenticatePasswordScreen'
+        name="ReauthenticatePasswordScreen"
         component={ReauthenticatePasswordScreen}
         options={{
-          title: 'Reauthenticate Account',
+          title: "Reauthenticate Account",
         }}
       />
       <Stack.Screen
-        name='ReauthenticateEmailScreen'
+        name="ReauthenticateEmailScreen"
         component={ReauthenticateEmailScreen}
         options={{
-          title: 'Reauthenticate Account',
+          title: "Reauthenticate Account",
         }}
       />
     </Stack.Navigator>
@@ -122,7 +122,7 @@ export const AppStack = () => {
 /*onPress={() => goBack('screen-123')} */
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingHorizontal: 12,
   },
 });
