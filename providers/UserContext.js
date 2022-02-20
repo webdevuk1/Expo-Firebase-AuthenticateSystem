@@ -89,7 +89,7 @@ export const UserContextProvider = ({ children }) => {
             //     //setUseNav(true);
             //     console.log(useNav);
           });
-
+          //
           // console.log(user, "worked");
         }
 
