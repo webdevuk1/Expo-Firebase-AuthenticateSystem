@@ -1,5 +1,4 @@
 import React from "react";
-//import { NavigationContainer } from '@react-navigation/native';
 
 import { AuthStack } from "./AuthStack";
 import { AppStack } from "./AppStack";
@@ -8,14 +7,14 @@ import { useUserContext } from "../providers/UserContext";
 import { LoadingIndicator } from "../components";
 
 export const RootNavigator = () => {
-  const { user, isLoading } = useUserContext();
+  const { currentUser, isLoading } = useUserContext();
 
   if (isLoading) {
     return <LoadingIndicator />;
   }
 
   // User is authenticated and verified
-  if (user && user.emailVerified)
+  if (currentUser && currentUser.emailVerified)
     return (
       // <NavigationContainer>
       <AppStack />
@@ -23,7 +22,7 @@ export const RootNavigator = () => {
     );
 
   // User is authenticated, but their email hasn't been verified
-  if (user)
+  if (currentUser)
     return (
       //   <NavigationContainer>
       <UnverifiedStack />

@@ -17,10 +17,10 @@ export const loginValidationSchema = Yup.object().shape({
 
 export const signupValidationSchema = Yup.object().shape({
   email: Yup.string()
-    .required()
+    .required("")
     .email("Enter a valid email address")
     .label("Email"),
-  password: Yup.string().required().min(6).label("Password"),
+  password: Yup.string().required("").min(6).label("Password"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Confirm Password must match password.")
     .required("Confirm Password is required."),
@@ -28,7 +28,7 @@ export const signupValidationSchema = Yup.object().shape({
 
 export const passwordResetSchema = Yup.object().shape({
   email: Yup.string()
-    .required()
+    .required("")
     .label("Email")
     .email("Enter a valid email address"),
 });

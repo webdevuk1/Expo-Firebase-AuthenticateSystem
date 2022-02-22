@@ -1,6 +1,6 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
-// put this in right userConnt
+
 export const getUser = () => firebase.auth().currentUser;
 
 export const onAuthStateChanged = (args) =>

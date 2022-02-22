@@ -12,7 +12,7 @@ import { useUserContext } from "../../providers/UserContext";
 export const UpdateEmailScreen = ({ navigation }) => {
   const [errorState, setErrorState] = useState("");
   const [successState, setSuccessState] = useState("");
-  const { user, reload: reloadUser } = useUserContext();
+  const { currentUser, reload: reloadUser } = useUserContext();
 
   const handleUpdateEmail = async (values) => {
     const { email } = values;
@@ -40,8 +40,6 @@ export const UpdateEmailScreen = ({ navigation }) => {
     // reauthentate with google
 
     //reloadUser();
-
-    return handleUpdateEmail;
   };
   //need to change seconds on a module
   useEffect(() => {
@@ -109,7 +107,7 @@ export const UpdateEmailScreen = ({ navigation }) => {
       {/* Footer */}
       <View style={styles.footer}>
         <View style={styles.center}>
-          <Text style={styles.email}>{user.email}</Text>
+          <Text style={styles.email}>{currentUser.email}</Text>
         </View>
       </View>
     </View>

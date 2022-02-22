@@ -3,6 +3,11 @@ import { Text, StyleSheet } from "react-native";
 import { Formik } from "formik";
 import { reauthenticate } from "../../config/user";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import * as Google from "expo-google-app-auth";
+import {
+  GoogleAuthProvider,
+  reauthenticateWithCredential,
+} from "firebase/auth";
 
 import { View, TextInput, Button, FormErrorMessage } from "../../components";
 import { Colors } from "../../config";
@@ -11,7 +16,8 @@ import { loginValidationSchema } from "../../utils";
 import { useUserContext } from "../../providers/UserContext";
 
 export const ReauthenticateEmailScreen = ({ navigation }) => {
-  const { reauthenticateWithGoogle, useNav } = useUserContext();
+  // const { reauthenticateWithGoogle } = useUserContext();
+  const { currentUser, config } = useUserContext();
   const [errorState, setErrorState] = useState("");
   const { passwordVisibility, handlePasswordVisibility, rightIcon } =
     useTogglePasswordVisibility();
@@ -24,23 +30,46 @@ export const ReauthenticateEmailScreen = ({ navigation }) => {
     } catch (error) {
       setErrorState(error.message);
     }
-    return handleReauthenticate;
   };
-
+  /*
   const handleSignInWithGoogle = async () => {
     try {
-      await reauthenticateWithGoogle().then(() => {
-        // if (useNav === true) {
-        //navigation.navigate("UpdateEmailScreen");
-        console.log("kk");
-        // }
+      await reauthenticateWithGoogle1(currentUser).then((res) => {
+        console.log(res);
       });
-      //navigation.navigate("UpdateEmailScreen");
-      // navigation.navigate("UpdateEmailScreen");
+      navigation.navigate("UpdateEmailScreen");
+      console.log("reauthenticateWithGoogle Worked");
     } catch (error) {
       setErrorState(error.message);
     }
-    return handleSignInWithGoogle;
+  };
+  */
+
+  const handleReauthenticateWithGoogle = async () => {
+    try {
+      await Google.logInAsync(config).then(async (logInResult) => {
+        const { idToken, accessToken, user } = logInResult;
+        const credential = GoogleAuthProvider.credential(idToken, accessToken);
+        if (
+          user.email === currentUser.email &&
+          logInResult.type === "success"
+        ) {
+          await reauthenticateWithCredential(currentUser, credential).then(
+            () => {
+              navigation.navigate("UpdateEmailScreen");
+            }
+          );
+        } else {
+          // Try Catch wont log the if statement condictions error need to set a custom error.
+          setErrorState(
+            "Cant sign in to your Google account, Please make sure you selected the correct Google account."
+          );
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      setErrorState(error.message);
+    }
   };
 
   return (
@@ -121,7 +150,7 @@ export const ReauthenticateEmailScreen = ({ navigation }) => {
                 </View>
                 <Button
                   style={styles.button}
-                  onPress={() => handleSignInWithGoogle()}
+                  onPress={() => handleReauthenticateWithGoogle()}
                 >
                   <Text style={styles.buttonText}>Sign In With Google</Text>
                 </Button>
