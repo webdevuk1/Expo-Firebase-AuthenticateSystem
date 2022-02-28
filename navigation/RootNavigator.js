@@ -14,24 +14,10 @@ export const RootNavigator = () => {
   }
 
   // User is authenticated and verified
-  if (currentUser && currentUser.emailVerified)
-    return (
-      // <NavigationContainer>
-      <AppStack />
-      //  </NavigationContainer>
-    );
+  if (currentUser && currentUser.emailVerified) return <AppStack />;
 
   // User is authenticated, but their email hasn't been verified
-  if (currentUser)
-    return (
-      //   <NavigationContainer>
-      <UnverifiedStack />
-      //  </NavigationContainer>
-    );
+  if (currentUser) return <UnverifiedStack />;
 
-  return (
-    //   <NavigationContainer>
-    <AuthStack />
-    //  </NavigationContainer>
-  );
+  return <AuthStack />;
 };

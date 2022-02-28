@@ -3,20 +3,21 @@ import { Text, StyleSheet } from "react-native";
 import { Formik } from "formik";
 import { reauthenticate } from "../../config/user";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
+import * as Google from "expo-google-app-auth";
 import {
-  View,
-  TextInput,
-  Logo,
-  Button,
-  FormErrorMessage,
-} from "../../components";
-import { Images, Colors } from "../../config";
+  GoogleAuthProvider,
+  reauthenticateWithCredential,
+} from "firebase/auth";
+
+import { View, TextInput, Button, FormErrorMessage } from "../../components";
+import { Colors } from "../../config";
 import { useTogglePasswordVisibility } from "../../hooks";
 import { loginValidationSchema } from "../../utils";
+import { useUserContext } from "../../providers/UserContext";
 
 export const ReauthenticatePasswordScreen = ({ navigation }) => {
   const [errorState, setErrorState] = useState("");
+  const { currentUser, config, setIsLoading } = useUserContext();
   const { passwordVisibility, handlePasswordVisibility, rightIcon } =
     useTogglePasswordVisibility();
 
@@ -28,14 +29,42 @@ export const ReauthenticatePasswordScreen = ({ navigation }) => {
     } catch (error) {
       setErrorState(error.message);
     }
-    return handleReauthenticate;
+  };
+
+  const handleReauthenticateWithGoogle = async () => {
+    // need to add loading gif
+    setIsLoading(true);
+
+    try {
+      await Google.logInAsync(config).then(async (logInResult) => {
+        const { idToken, accessToken, user } = logInResult;
+        const credential = GoogleAuthProvider.credential(idToken, accessToken);
+        if (
+          user.email === currentUser.email &&
+          logInResult.type === "success"
+        ) {
+          await reauthenticateWithCredential(currentUser, credential).then(
+            () => {
+              navigation.navigate("UpdatePasswordScreen");
+            }
+          );
+        } else {
+          setErrorState(
+            "Cant sign in to your Google account, Please make sure you selected the correct Google account."
+          );
+        }
+      });
+    } catch (error) {
+      setErrorState(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <>
       <View isSafe style={styles.container}>
         <KeyboardAwareScrollView enableOnAndroid={true}>
-          {/* LogoContainer: consits app logo and screen title */}
           <View style={styles.center}>
             <Text style={styles.screenTitle}>Sign In To Update Password</Text>
           </View>
@@ -98,6 +127,15 @@ export const ReauthenticatePasswordScreen = ({ navigation }) => {
                 {/* Login button */}
                 <Button style={styles.button} onPress={handleSubmit}>
                   <Text style={styles.buttonText}>Login</Text>
+                </Button>
+                <View style={styles.center}>
+                  <Text style={styles.text}>OR</Text>
+                </View>
+                <Button
+                  style={styles.button}
+                  onPress={() => handleReauthenticateWithGoogle()}
+                >
+                  <Text style={styles.buttonText}>Sign In With Google</Text>
                 </Button>
               </>
             )}

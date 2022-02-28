@@ -3,6 +3,8 @@ import { Text, StyleSheet } from "react-native";
 import { Formik } from "formik";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import * as Google from "expo-google-app-auth";
+import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 
 import {
   View,
@@ -17,7 +19,7 @@ import { loginValidationSchema } from "../../utils";
 import { useUserContext } from "../../providers/UserContext";
 
 export const LoginScreen = ({ navigation }) => {
-  const { signInWithGoogle } = useUserContext();
+  const { config, setIsLoading } = useUserContext();
   const [errorState, setErrorState] = useState("");
   const { passwordVisibility, handlePasswordVisibility, rightIcon } =
     useTogglePasswordVisibility();
@@ -29,13 +31,26 @@ export const LoginScreen = ({ navigation }) => {
     );
   };
 
-  const handleSignInWithGoogle = () => {
+  const handleSignInWithGoogle = async () => {
+    // need add loading gif
+    setIsLoading(true);
+
     try {
-      signInWithGoogle();
+      await Google.logInAsync(config).then(async (logInResult) => {
+        if (logInResult.type === "success") {
+          const { idToken, accessToken } = logInResult;
+          const credential = GoogleAuthProvider.credential(
+            idToken,
+            accessToken
+          );
+          await signInWithCredential(auth, credential);
+        }
+      });
     } catch (error) {
       setErrorState(error.message);
+    } finally {
+      setIsLoading(false);
     }
-    return handleSignInWithGoogle;
   };
 
   return (

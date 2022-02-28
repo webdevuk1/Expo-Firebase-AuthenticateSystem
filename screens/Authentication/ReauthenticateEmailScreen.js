@@ -16,8 +16,7 @@ import { loginValidationSchema } from "../../utils";
 import { useUserContext } from "../../providers/UserContext";
 
 export const ReauthenticateEmailScreen = ({ navigation }) => {
-  // const { reauthenticateWithGoogle } = useUserContext();
-  const { currentUser, config } = useUserContext();
+  const { currentUser, config, setIsLoading } = useUserContext();
   const [errorState, setErrorState] = useState("");
   const { passwordVisibility, handlePasswordVisibility, rightIcon } =
     useTogglePasswordVisibility();
@@ -31,21 +30,10 @@ export const ReauthenticateEmailScreen = ({ navigation }) => {
       setErrorState(error.message);
     }
   };
-  /*
-  const handleSignInWithGoogle = async () => {
-    try {
-      await reauthenticateWithGoogle1(currentUser).then((res) => {
-        console.log(res);
-      });
-      navigation.navigate("UpdateEmailScreen");
-      console.log("reauthenticateWithGoogle Worked");
-    } catch (error) {
-      setErrorState(error.message);
-    }
-  };
-  */
 
   const handleReauthenticateWithGoogle = async () => {
+    // setIsLoading(true);
+
     try {
       await Google.logInAsync(config).then(async (logInResult) => {
         const { idToken, accessToken, user } = logInResult;
@@ -60,7 +48,6 @@ export const ReauthenticateEmailScreen = ({ navigation }) => {
             }
           );
         } else {
-          // Try Catch wont log the if statement condictions error need to set a custom error.
           setErrorState(
             "Cant sign in to your Google account, Please make sure you selected the correct Google account."
           );
@@ -69,6 +56,8 @@ export const ReauthenticateEmailScreen = ({ navigation }) => {
     } catch (error) {
       console.log(error);
       setErrorState(error.message);
+    } finally {
+      //setIsLoading(false);
     }
   };
 
