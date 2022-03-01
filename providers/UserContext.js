@@ -2,11 +2,12 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import Constants from "expo-constants";
 
 import { onAuthStateChanged, reload, sendVerification } from "../config/user";
+
 const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   // When uploading the project to the app store i will need to switch out the bundle id on firebase.
   // currently using host.exp.exponent for development on expo.
@@ -32,6 +33,7 @@ export const UserContextProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged((currentUser) => {
       if (currentUser) {
         setCurrentUser(currentUser);
+        setIsLoading(true);
         // check if its send emailveried
         if (!currentUser.emailVerified) {
           sendVerification();

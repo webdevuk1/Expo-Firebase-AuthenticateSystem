@@ -14,9 +14,10 @@ import { Colors } from "../../config";
 import { useTogglePasswordVisibility } from "../../hooks";
 import { loginValidationSchema } from "../../utils";
 import { useUserContext } from "../../providers/UserContext";
+import { LoadingIndicator } from "../../components";
 
 export const ReauthenticateEmailScreen = ({ navigation }) => {
-  const { currentUser, config, setIsLoading } = useUserContext();
+  const { currentUser, config, setIsLoading, isLoading } = useUserContext();
   const [errorState, setErrorState] = useState("");
   const { passwordVisibility, handlePasswordVisibility, rightIcon } =
     useTogglePasswordVisibility();
@@ -32,7 +33,7 @@ export const ReauthenticateEmailScreen = ({ navigation }) => {
   };
 
   const handleReauthenticateWithGoogle = async () => {
-    // setIsLoading(true);
+    setIsLoading(true);
 
     try {
       await Google.logInAsync(config).then(async (logInResult) => {
@@ -54,15 +55,15 @@ export const ReauthenticateEmailScreen = ({ navigation }) => {
         }
       });
     } catch (error) {
-      console.log(error);
       setErrorState(error.message);
     } finally {
-      //setIsLoading(false);
+      setIsLoading(false);
     }
   };
 
   return (
     <>
+      {isLoading ? <LoadingIndicator /> : null}
       <View isSafe style={styles.container}>
         <KeyboardAwareScrollView enableOnAndroid={true}>
           {/* LogoContainer: consits app logo and screen title */}

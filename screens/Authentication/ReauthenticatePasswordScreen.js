@@ -32,7 +32,6 @@ export const ReauthenticatePasswordScreen = ({ navigation }) => {
   };
 
   const handleReauthenticateWithGoogle = async () => {
-    // need to add loading gif
     setIsLoading(true);
 
     try {
