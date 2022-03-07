@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Constants from "expo-constants";
 
-import { onAuthStateChanged, reload, sendVerification } from "../config/user";
+import { onAuthStateChanged, reload } from "../config/user";
 
 const UserContext = createContext();
 
@@ -33,11 +33,6 @@ export const UserContextProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged((currentUser) => {
       if (currentUser) {
         setCurrentUser(currentUser);
-        setIsLoading(true);
-        // check if its send emailveried
-        if (!currentUser.emailVerified) {
-          sendVerification();
-        }
       } else {
         setCurrentUser(null);
       }
@@ -47,14 +42,14 @@ export const UserContextProvider = ({ children }) => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [currentUser]);
 
-  // move onto page
   const handleReload = async () => {
     try {
-      await reload();
-      const user = getUser();
-      setCurrentUser(user);
+      await reload().then(() => {
+        const user = getUser();
+        setCurrentUser(user);
+      });
     } catch (error) {
       setCurrentUser(null);
     }

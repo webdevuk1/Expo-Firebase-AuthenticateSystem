@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Text, StyleSheet } from 'react-native';
-import { Formik } from 'formik';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useState } from "react";
+import { Text, StyleSheet } from "react-native";
+import { Formik } from "formik";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import {
   View,
@@ -10,13 +10,14 @@ import {
   Logo,
   Button,
   FormErrorMessage,
-} from '../../components';
-import { Images, Colors, auth } from '../../config';
-import { useTogglePasswordVisibility } from '../../hooks';
-import { signupValidationSchema } from '../../utils';
+} from "../../components";
+import { Images, Colors, auth } from "../../config";
+import { signUp } from "../../config/user";
+import { useTogglePasswordVisibility } from "../../hooks";
+import { signupValidationSchema } from "../../utils";
 
 export const SignupScreen = ({ navigation }) => {
-  const [errorState, setErrorState] = useState('');
+  const [errorState, setErrorState] = useState("");
 
   const {
     passwordVisibility,
@@ -27,12 +28,17 @@ export const SignupScreen = ({ navigation }) => {
     confirmPasswordVisibility,
   } = useTogglePasswordVisibility();
 
-  const handleSignup = async values => {
+  const handleSignup = async (values) => {
     const { email, password } = values;
 
-    createUserWithEmailAndPassword(auth, email, password).catch(error =>
+    try {
+      await signUp(values);
+    } catch (error) {
+      setErrorState(error.message);
+    }
+    /*createUserWithEmailAndPassword(auth, email, password).catch(error =>
       setErrorState(error.message)
-    );
+    );*/
   };
 
   return (
@@ -48,12 +54,13 @@ export const SignupScreen = ({ navigation }) => {
         {/* Formik Wrapper */}
         <Formik
           initialValues={{
-            email: '',
-            password: '',
-            confirmPassword: '',
+            email: "",
+            password: "",
+            confirmPassword: "",
           }}
           validationSchema={signupValidationSchema}
-          onSubmit={values => handleSignup(values)}>
+          onSubmit={(values) => handleSignup(values)}
+        >
           {({
             values,
             touched,
@@ -65,56 +72,56 @@ export const SignupScreen = ({ navigation }) => {
             <>
               {/* Input fields */}
               <TextInput
-                name='email'
-                leftIconName='email'
-                placeholder='Enter email'
-                autoCapitalize='none'
-                keyboardType='email-address'
-                textContentType='emailAddress'
+                name="email"
+                leftIconName="email"
+                placeholder="Enter email"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                textContentType="emailAddress"
                 autoFocus={true}
                 value={values.email}
-                onChangeText={handleChange('email')}
-                onBlur={handleBlur('email')}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
               />
               <FormErrorMessage error={errors.email} visible={touched.email} />
               <TextInput
-                name='password'
-                leftIconName='key-variant'
-                placeholder='Enter password'
-                autoCapitalize='none'
+                name="password"
+                leftIconName="key-variant"
+                placeholder="Enter password"
+                autoCapitalize="none"
                 autoCorrect={false}
                 secureTextEntry={passwordVisibility}
-                textContentType='newPassword'
+                textContentType="newPassword"
                 rightIcon={rightIcon}
                 handlePasswordVisibility={handlePasswordVisibility}
                 value={values.password}
-                onChangeText={handleChange('password')}
-                onBlur={handleBlur('password')}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
               />
               <FormErrorMessage
                 error={errors.password}
                 visible={touched.password}
               />
               <TextInput
-                name='confirmPassword'
-                leftIconName='key-variant'
-                placeholder='Enter password'
-                autoCapitalize='none'
+                name="confirmPassword"
+                leftIconName="key-variant"
+                placeholder="Enter password"
+                autoCapitalize="none"
                 autoCorrect={false}
                 secureTextEntry={confirmPasswordVisibility}
-                textContentType='password'
+                textContentType="password"
                 rightIcon={confirmPasswordIcon}
                 handlePasswordVisibility={handleConfirmPasswordVisibility}
                 value={values.confirmPassword}
-                onChangeText={handleChange('confirmPassword')}
-                onBlur={handleBlur('confirmPassword')}
+                onChangeText={handleChange("confirmPassword")}
+                onBlur={handleBlur("confirmPassword")}
               />
               <FormErrorMessage
                 error={errors.confirmPassword}
                 visible={touched.confirmPassword}
               />
               {/* Display Screen Error Mesages */}
-              {errorState !== '' ? (
+              {errorState !== "" ? (
                 <FormErrorMessage error={errorState} visible={true} />
               ) : null}
               {/* Signup button */}
@@ -135,20 +142,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   center: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   logo: {
     paddingTop: 10,
   },
   screenTitle: {
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.black,
   },
   button: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 8,
     backgroundColor: Colors.black,
     padding: 10,
@@ -157,6 +164,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 20,
     color: Colors.white,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });
