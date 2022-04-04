@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, StyleSheet } from "react-native";
-import { sendVerification } from "../../config/user";
 
+import { sendVerification } from "../../config/user";
 import { useUserContext } from "../../providers/UserContext";
 import { View, Button } from "../../components";
 import { Colors } from "../../config";
@@ -14,6 +14,15 @@ export const VerifyEmailScreen = () => {
       await sendVerification();
     } catch (error) {}
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!!currentUser && !currentUser?.emailVerified) {
+        reloadUser();
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>

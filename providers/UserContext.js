@@ -23,9 +23,16 @@ export const UserContextProvider = ({ children }) => {
     fix 
     The action 'POP_TO_TOP' was not handled by any navigator.
     Is there any screen to go back to?
+
+    if(navigation.canGoBack()) {
+  navigation.dispatch(StackActions.pop(1));
+
+  Why does Reload() log m e out of my account attemt add !currentuser on 
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+ }
   */
 
-  // add logout with expo google
+  // add logout with expo google check out sonny sang vid
   // move all auth over to usercontext e.g signin with login and signout forgotpass and seterror to the pages
 
   // Listen to Firebase authentication state changes

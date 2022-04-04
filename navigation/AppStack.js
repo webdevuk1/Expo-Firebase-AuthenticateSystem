@@ -81,7 +81,9 @@ export const AppStack = () => {
             <HeaderBackButton
               {...props}
               onPress={() => {
-                navigation.dispatch(StackActions.popToTop());
+                if (navigation.canGoBack()) {
+                  navigation.dispatch(StackActions.popToTop());
+                }
               }}
             />
           ),
@@ -96,7 +98,9 @@ export const AppStack = () => {
             <HeaderBackButton
               {...props}
               onPress={() => {
-                navigation.dispatch(StackActions.popToTop());
+                if (navigation.canGoBack()) {
+                  navigation.dispatch(StackActions.popToTop());
+                }
               }}
             />
           ),
@@ -119,7 +123,7 @@ export const AppStack = () => {
     </Stack.Navigator>
   );
 };
-/*onPress={() => goBack('screen-123')} */
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",

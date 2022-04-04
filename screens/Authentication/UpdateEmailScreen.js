@@ -11,6 +11,7 @@ import { updateEmailValidationSchema } from "../../utils";
 export const UpdateEmailScreen = ({ navigation }) => {
   const [errorState, setErrorState] = useState("");
   const [successState, setSuccessState] = useState("");
+  let counter = 0;
 
   const handleUpdateEmail = async (values) => {
     const { email } = values;
@@ -30,15 +31,22 @@ export const UpdateEmailScreen = ({ navigation }) => {
     }
   };
 
-  // need put reloadUser() when going to setting page.
-
-  //need to change seconds on a module
   useEffect(() => {
-    const timer = setTimeout(() => {
-      navigation.navigate("ProfileScreen");
-    }, 170000);
+    const interval = setInterval(() => {
+      reloadUser();
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
-    return () => clearTimeout(timer);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (counter === 3000) {
+        navigation.navigate("ProfileScreen");
+      } else {
+        counter++;
+      }
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   return (

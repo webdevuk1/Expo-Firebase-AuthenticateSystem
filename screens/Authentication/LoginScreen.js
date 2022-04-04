@@ -32,7 +32,6 @@ export const LoginScreen = ({ navigation }) => {
   };
 
   const handleSignInWithGoogle = async () => {
-    // need add loading gif
     setIsLoading(true);
 
     try {
